@@ -21,8 +21,8 @@ services:
       retries: 20
 
   server:
-    build: 
-      context: .  
+    build:
+      context: .
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
@@ -41,7 +41,9 @@ services:
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
-    command: npx prisma studio --port 5555 --browser none
+      - prisma-studio-node_modules:/usr/src/app/node_modules
+      - prisma-studio-pnpm-store:/root/.local/share/pnpm/store
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm exec prisma studio --port 5555 --browser none"
     ports:
       - "5555:5555"
     env_file:
@@ -56,3 +58,7 @@ services:
 networks:
   prisma-network:
     name: prisma-network
+
+volumes:
+  prisma-studio-node_modules:
+  prisma-studio-pnpm-store:

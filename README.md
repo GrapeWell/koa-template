@@ -1,4 +1,4 @@
-# Eco Board Server TS
+# Koa Template
 
 一个基于 **Koa + TypeScript + Prisma** 的后端开发模板，开箱即用，适合快速搭建 Node.js 后端项目。
 
@@ -11,7 +11,7 @@
 - **Docker Compose** - 一键启动开发环境
 - **ESLint** - 代码规范检查 (使用 @antfu/eslint-config)
 - **pnpm** - 快速、节省磁盘空间的包管理器
-
+- **Swagger (OpenAPI)** - 基于 `koa-swagger-decorator` 自动生成 API 文档
 ## 📁 项目结构
 
 ```
@@ -20,11 +20,11 @@
 │   └── migrations/          # 数据库迁移文件
 ├── src/
 │   ├── index.ts             # 应用入口
-│   ├── app/                 # 应用配置
 │   ├── controller/          # 控制器
-│   ├── entity/              # 实体定义
 │   ├── middleware/          # 中间件
-│   ├── swagger/             # API 文档
+│   ├── router/              # 路由与 Swagger 配置
+│   ├── schema/              # 请求参数校验/类型（zod）
+│   ├── service/             # 业务逻辑与数据访问
 │   ├── types/               # 类型定义
 │   ├── utils/               # 工具函数
 │   └── generated/prisma/    # Prisma 自动生成的客户端
@@ -32,6 +32,12 @@
 ├── Dockerfile               # Docker 镜像构建
 └── package.json
 ```
+
+## 🧭 Swagger (API 文档)
+
+- **启用说明**: 项目使用 `koa-swagger-decorator` 自动生成 OpenAPI 文档和 UI。
+- **访问地址**: 启动服务后打开 `http://localhost:3000/api/swagger-html` 查看 Swagger UI；`http://localhost:3000/api/swagger-json` 返回 OpenAPI JSON。
+- **路由前缀**: 当前 API 路由统一前缀为 `/api`（见 [src/router/index.ts](src/router/index.ts#L1)）。
 
 ## 🛠️ 快速开始
 
@@ -137,14 +143,29 @@ npx prisma migrate reset
 
 ### 添加新的路由
 
-在 `src/index.ts` 或创建新的 controller 文件添加路由:
+在 `src/controller` 中创建新的 controller 文件添加路由:
 
 ```typescript
-router.get('/api/users', async (ctx) => {
-  const users = await prisma.user.findMany()
-  ctx.body = users
-})
+import type { Context } from 'koa'
+import { routeConfig } from 'koa-swagger-decorator'
+
+class UserController {
+  @routeConfig({
+    method: 'get',
+    path: '/users',
+    summary: 'Get all users',
+    description: 'example of api',
+    tags: ['USER'],
+  })
+  async getUsers(ctx: Context) {
+    ctx.body = { users: [] }
+  }
+}
+
+export { UserController }
 ```
+
+提示：该路由最终访问路径为 `GET /api/users`（因为在 [src/router/index.ts](src/router/index.ts#L1) 中设置了 `router.prefix('/api')`）。
 
 ## 📄 License
 
