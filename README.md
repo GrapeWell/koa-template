@@ -123,6 +123,10 @@ docker compose -f docker-compose.yml up -d
 测试相关资料
 [prisma集成vitest](https://www.prisma.io/blog/testing-series-1-8eRB5p0Y8o)
 
+### 单元测试
+
+在对应的模块创建*.test.ts文件，一般需要对有判断逻辑的函数进行测试，如果只有prisma客户端的操作函数，可以无需单元测试
+
 ## 🗄️ 数据库操作
 
 ### 创建新迁移
