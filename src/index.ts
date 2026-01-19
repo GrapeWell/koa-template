@@ -3,9 +3,8 @@ import cors from '@koa/cors'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import compress from 'koa-compress'
-import { errorMiddleware } from './middleware/error.js'
-import { loggerMiddleware } from './middleware/log.js'
-import { prismaMiddleware } from './middleware/prisma.js'
+import { errorMiddleware } from './middleware/error'
+import { loggerMiddleware } from './middleware/log'
 
 import router from './router/'
 
@@ -18,9 +17,6 @@ app.use(errorMiddleware)
 
 // 日志中间件，主要是记录请求的响应时间，为后续慢请求分析做准备
 app.use(loggerMiddleware)
-
-// Prisma 中间件，将 prisma 客户端注入到 ctx.state 中
-app.use(prismaMiddleware())
 
 // 添加CORS支持
 app.use(

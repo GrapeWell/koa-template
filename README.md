@@ -1,4 +1,4 @@
-# Koa Template
+# Koa Prisma Template
 
 一个基于 **Koa + TypeScript + Prisma** 的后端开发模板，开箱即用，适合快速搭建 Node.js 后端项目。
 
@@ -23,11 +23,9 @@
 │   └── sample.test.ts        # Vitest 单元测试（mock Prisma）
 ├── src/
 │   ├── index.ts             # 应用入口
-│   ├── controller/          # 控制器
 │   ├── middleware/          # 中间件
+│   ├── modules/             # 模块，类似DDD(领域驱动设计)
 │   ├── router/              # 路由与 Swagger 配置
-│   ├── schema/              # 请求参数校验/类型（zod）
-│   ├── service/             # 业务逻辑与数据访问
 │   ├── types/               # 类型定义
 │   ├── utils/               # 工具函数
 │   └── generated/prisma/    # Prisma 自动生成的客户端
@@ -61,7 +59,7 @@ pnpm install
 创建 `.env` 文件（本地开发）:
 
 ```env
-DATABASE_URL="postgresql://postgres:prisma@localhost:5432/postgres"
+DATABASE_URL="postgresql://postgres:prisma@postgres_db:5432/postgres"
 PORT=3000
 ```
 
@@ -79,7 +77,13 @@ docker compose up postgres_db -d
 pnpm prisma:migrate
 ```
 
-### 5. 启动开发服务器
+### 5. 生成prisma客户端
+
+```bash
+pnpm prisma:generate
+```
+
+### 6. 启动本地开发服务器
 
 ```bash
 pnpm dev
@@ -92,7 +96,7 @@ pnpm dev
 启动所有服务（PostgreSQL + Server）:
 
 ```bash
-docker compose up -d
+docker compose -f docker-compose.yml up -d
 ```
 
 服务端口:
@@ -104,7 +108,8 @@ docker compose up -d
 | 命令 | 描述 |
 |------|------|
 | `pnpm dev` | 启动开发服务器（热重载） |
-| `pnpm test` | 运行 Vitest 单元测试 |
+| `pnpm test` | 运行 Vitest 测试 |
+| `pnpm test:unit` | 运行单元测试 |
 | `pnpm lint` | 运行 ESLint 检查 |
 | `pnpm lint:fix` | 自动修复 ESLint 问题 |
 | `pnpm prisma:generate` | 生成 Prisma 客户端 |
@@ -117,9 +122,6 @@ docker compose up -d
 
 测试相关资料
 [prisma集成vitest](https://www.prisma.io/blog/testing-series-1-8eRB5p0Y8o)
-```bash
-pnpm test
-```
 
 ## 🗄️ 数据库操作
 
@@ -147,7 +149,7 @@ npx prisma migrate reset
 
 1. 编辑 `prisma/schema.prisma` 添加模型
 2. 运行 `pnpm prisma:migrate` 创建迁移
-3. Prisma 客户端会自动生成到 `src/generated/prisma/`
+3. 执行 `pnpm prisma:generate` 创建client
 
 ### 添加新的路由
 

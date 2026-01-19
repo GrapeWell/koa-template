@@ -1,5 +1,5 @@
 import { SwaggerRouter } from 'koa-swagger-decorator'
-import { UserController } from '../controller/user'
+import { UserController } from '../modules/user/user.controller'
 
 const router = new SwaggerRouter({
   spec: {

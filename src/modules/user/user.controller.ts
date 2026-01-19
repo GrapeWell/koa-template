@@ -1,12 +1,12 @@
 import type { Context } from 'koa'
 import type { ParsedArgs } from 'koa-swagger-decorator'
-import type { ICreateUserReq } from '../schema/user'
+import type { ICreateUserReq } from './user.schema'
 import { body, routeConfig } from 'koa-swagger-decorator'
 import {
   CreateUserReq,
 
-} from '../schema/user'
-import User from '../service/user'
+} from './user.schema'
+import User from './user.service'
 
 class UserController {
   @routeConfig({
