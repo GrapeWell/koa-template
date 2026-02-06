@@ -15,7 +15,8 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "build": "tsc"
   },
   "dependencies": {
     "@koa/cors": "^5.0.0",

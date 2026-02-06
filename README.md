@@ -13,6 +13,7 @@
 - **pnpm** - 快速、节省磁盘空间的包管理器
 - **Swagger (OpenAPI)** - 基于 `koa-swagger-decorator` 自动生成 API 文档
 - **Vitest** - 快速生成测试用例
+- **log4js** - 轻量级的日志生成
 ## 📁 项目结构
 
 ```
@@ -115,6 +116,7 @@ docker compose -f docker-compose.yml up -d
 | `pnpm prisma:generate` | 生成 Prisma 客户端 |
 | `pnpm prisma:migrate` | 创建并应用数据库迁移 |
 | `pnpm db:deploy` | 部署迁移并生成客户端（生产环境） |
+| `pnpm build` | tsc打包 |
 
 ## ✅ 测试（Vitest）
 
@@ -180,6 +182,14 @@ export { UserController }
 ```
 
 提示：该路由最终访问路径为 `GET /api/users`（因为在 [src/router/index.ts](src/router/index.ts#L1) 中设置了 `router.prefix('/api')`）。
+
+## 部署
+
+部署部分需要根据情况自行实现，提供两种思路
+
+1. 执行`build`命令打包后，结合github actions，通过ssh将文件(dist, node_modules, .env)传到服务器，再用`pm2`启动，或者在服务器上克隆项目，install->build->pm2
+
+2. (推荐)打包docker镜像，推送到docker hub，在服务器拉取镜像，使用docker命令启动
 
 ## 📄 License
 
